@@ -24,12 +24,12 @@
 # Run the image with production profile (using PostgreSQL database):
 # docker run -p 8080:8080 --rm -it -e SPRING_PROFILES_ACTIVE=production optaweb/employee-rostering
 
-FROM adoptopenjdk/maven-openjdk8:latest as builder
+FROM adoptopenjdk/maven-openjdk11:latest as builder
 WORKDIR /usr/src/optaweb
 COPY . .
 RUN mvn clean install -DskipTests
 
-FROM adoptopenjdk/openjdk8:ubi-minimal-jre
+FROM adoptopenjdk/openjdk11:ubi-minimal-jre
 RUN mkdir /opt/app
 COPY --from=builder /usr/src/optaweb/optaweb-employee-rostering-standalone/target/*-exec.jar /opt/app/optaweb-employee-rostering.jar
 CMD ["java", "-jar", "/opt/app/optaweb-employee-rostering.jar"]
